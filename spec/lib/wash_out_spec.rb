@@ -920,14 +920,16 @@ describe WashOut do
       mock_controller do; end
       invalid_request = '<a></a>'
       response_hash = Nori.new.parse(HTTPI.post("http://app/route/api/action", invalid_request).body)
-      expect(response_hash["soap:Envelope"]["soap:Body"]["soap:Fault"]['faultstring']).to eq "Invalid SOAP request: no Envelope"
+      expect(response_hash["soap:Envelope"]["soap:Body"]["soap:Fault"]['faultstring']).to eq "Invalid SOAP request"
+      # expect(response_hash["soap:Envelope"]["soap:Body"]["soap:Fault"]['faultstring']).to eq "Invalid SOAP request: no Envelope"
     end
 
     it "raises when SOAP message without SOAP Body arrives" do
       mock_controller do; end
       invalid_request = '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"></s:Envelope>'
       response_hash = Nori.new.parse(HTTPI.post("http://app/route/api/action", invalid_request).body)
-      expect(response_hash["soap:Envelope"]["soap:Body"]["soap:Fault"]['faultstring']).to eq "Invalid SOAP request: No Body"
+      expect(response_hash["soap:Envelope"]["soap:Body"]["soap:Fault"]['faultstring']).to eq "Invalid SOAP request"
+      # expect(response_hash["soap:Envelope"]["soap:Body"]["soap:Fault"]['faultstring']).to eq "Invalid SOAP request: No Body"
     end
   end
 
