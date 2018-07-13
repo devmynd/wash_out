@@ -263,8 +263,6 @@ module WashOut
       # Remove explicit return
 
       return xml_data if soap_config.wsdl_style == "document"
-      # This is where the bug is...:w
-      # Figure out who is setting soap_action and request_input_tag
       xml_data = xml_data.values_at(soap_action.underscore.to_sym, soap_action.to_sym, request_input_tag.to_sym).compact.first || {}
     end
 

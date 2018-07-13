@@ -19,6 +19,8 @@ module WashOut
       def soap_action(action, options={})
         if options[:as].present?
           options[:to] ||= action
+
+          # Why is the action being overwritten? This seems like a bug.
           action = options[:as]
         end
 
