@@ -31,8 +31,10 @@ module WashOut
     end
 
     def _map_soap_parameters
-      self.params = _load_params action_spec[:in],
+      self.params = _load_params(
+        action_spec[:in],
         _strip_empty_nodes(action_spec[:in], xml_data)
+      )
     end
 
     def _map_soap_headers
@@ -232,12 +234,19 @@ module WashOut
     end
 
     private
+
     def soap_action?
       soap_action.present?
     end
 
     def action_spec
-      self.class.soap_actions[soap_action]
+      self.class.soap_actions.fetch(soap_action)
+    rescue KeyError
+      raise SOAPError.new(
+        "The request soap action does not match the controller action." +
+        "Given '#{soap_action}'," +
+        "Expected: '#{self.class.soap_actions.keys.first}'"
+      )
     end
 
     def request_input_tag

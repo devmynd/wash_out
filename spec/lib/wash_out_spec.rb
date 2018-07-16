@@ -529,6 +529,31 @@ describe WashOut do
 
           expect{savon(:rocknroll)}.not_to raise_error
         end
+
+        it "accepts a request with a :request_tag different from the action" do
+          mock_controller do
+            soap_action "checkAnswer",
+              args: :integer,
+              return: :boolean,
+              request_tag: "checkAnswerRequest",
+              to: :check_answer # This is required for this to work. Need to error if this is missing.
+
+            def check_answer
+              render soap: (params[:value] == 42)
+            end
+          end
+
+          true_response = savon(:check_answer, 42).
+            fetch(:check_answer_response).
+            fetch(:value)
+
+          false_response = savon(:check_answer, 13).
+            fetch(:check_answer_response).
+            fetch(:value)
+
+          expect(true_response).to be true
+          expect(false_response).to be false
+        end
       end
     end
 
