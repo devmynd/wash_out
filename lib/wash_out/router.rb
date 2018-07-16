@@ -94,7 +94,7 @@ module WashOut
     def parse_soap_parameters(env)
       return env['wash_out.soap_data'] if env['wash_out.soap_data']
 
-      env['wash_out.soap_data'] = 
+      env['wash_out.soap_data'] =
         nori(controller.soap_config.snakecase_input).
         parse(soap_body env)
 
